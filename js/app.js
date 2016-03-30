@@ -186,6 +186,7 @@ var CurrencyModule;
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
+			scope: {},
             compile: function (element, attr, transclude) {
                 var preferredCurrencies = [];
                 var includeCurrencies = [];
