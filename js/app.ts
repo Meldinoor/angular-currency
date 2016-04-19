@@ -1,5 +1,4 @@
-﻿
-module CurrencyModule {
+﻿module CurrencyModule {
     var Currencies = Object.freeze({
         "AFN": "Afghani",
         "EUR": "Euro",
@@ -198,6 +197,7 @@ module CurrencyModule {
                 var preferredCurrencies: string[] = [];
                 var includeCurrencies: string[] = [];
                 var excludeCurrencies: string[] = [];
+                var dropdownClass: string = 'dropdown';
 
                 if (attr['preferredCurrencies']) {
                     if (typeof attr['preferredCurrencies'] === 'array')
@@ -220,8 +220,13 @@ module CurrencyModule {
                         excludeCurrencies = attr['excludeCurrencies'].toString().split(',');
                 }
 
+                if (attr['direction']) {
+                    if (attr['direction'].toLowerCase() === 'up')
+                        dropdownClass = 'dropup';
+                }
+
                 var options: string =
-                    '<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
+                    '<div class="' + dropdownClass + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
                     + '<ul class="dropdown-menu currency-selecter-scrollable-menu">';
 
                 if (preferredCurrencies.length) {

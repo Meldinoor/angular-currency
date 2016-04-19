@@ -191,6 +191,7 @@ var CurrencyModule;
                 var preferredCurrencies = [];
                 var includeCurrencies = [];
                 var excludeCurrencies = [];
+				var dropdownClass = 'dropdown';
                 if (attr['preferredCurrencies']) {
                     if (typeof attr['preferredCurrencies'] === 'array')
                         preferredCurrencies = attr['preferredCurrencies'];
@@ -209,7 +210,11 @@ var CurrencyModule;
                     else
                         excludeCurrencies = attr['excludeCurrencies'].toString().split(',');
                 }
-                var options = '<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
+				if(attr['direction']) {
+					if(attr['direction'].toLowerCase() === 'up')
+						dropdownClass = 'dropup';
+				}
+                var options = '<div class="' + dropdownClass + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
                     + '<ul class="dropdown-menu currency-selecter-scrollable-menu">';
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
