@@ -4,7 +4,7 @@
     "Meldinoor <jonathan@iosoft.se>"
   ],
   "description": "A simple angular directive for selecting from world currencies",
-  "main": "[css/CurrencySelecter.css, js/app.js]",
+  "main": ["css/CurrencySelecter.css", "js/app.js"],
   "moduleType": [],
   "keywords": [
     "angular",
