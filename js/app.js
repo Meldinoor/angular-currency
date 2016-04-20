@@ -184,7 +184,7 @@ var CurrencyModule;
             restrict: 'E',
             require: 'ngModel',
             bindToController: true,
-            controllerAs: 'ctrls',
+            controllerAs: 'ctrl',
             controller: CurrencySelecterController,
 			scope: {},
             compile: function (element, attr, transclude) {
@@ -214,13 +214,13 @@ var CurrencyModule;
 					if(attr['direction'].toLowerCase() === 'up')
 						dropdownClass = 'dropup';
 				}
-                var options = '<div class="' + dropdownClass + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrls.ngModel.$viewValue}}<span class="caret"></span></button>'
+                var options = '<div class="' + dropdownClass + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
                     + '<ul class="dropdown-menu currency-selecter-scrollable-menu">';
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
                         if (Currencies[preferredCurrencies[i].toUpperCase()] !== void 0) {
                             var ucPc = preferredCurrencies[i].toUpperCase();
-                            options += '<li><a href="" ng-click="ctrls.selectCurrency(\'' + Currencies[ucPc] + ' (' + ucPc + ')\')" role="button">' + Currencies[ucPc] + ' (' + ucPc + ')</a></li>';
+                            options += '<li><a href="" ng-click="ctrl.selectCurrency(\'' + Currencies[ucPc] + ' (' + ucPc + ')\')" role="button">' + Currencies[ucPc] + ' (' + ucPc + ')</a></li>';
                         }
                     }
                     options += '<li role="separator" class="divider"></li>';
@@ -230,7 +230,7 @@ var CurrencyModule;
                         || excludeCurrencies.some(function (c, idx, arr) { return c.toUpperCase() === key; })
                         || (includeCurrencies.length !== 0 && !includeCurrencies.some(function (c, idx, arr) { return c.toUpperCase() === key; })))
                         continue;
-                    options += '<li><a href="" ng-click="ctrls.selectCurrency(\'' + Currencies[key] + ' (' + key + ')\')" role="button">' + Currencies[key] + ' (' + key + ')</a></li>';
+                    options += '<li><a href="" ng-click="ctrl.selectCurrency(\'' + Currencies[key] + ' (' + key + ')\')" role="button">' + Currencies[key] + ' (' + key + ')</a></li>';
                 }
                 element.append(options);
                 return {
@@ -244,7 +244,7 @@ var CurrencyModule;
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
                         }
-                        scope.ctrls.ngModel = ngModel;
+                        scope.ctrl.ngModel = ngModel;
                     }
                 };
             }
