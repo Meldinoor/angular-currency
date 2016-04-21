@@ -243,6 +243,7 @@ var CurrencyModule;
                         ngModel.$parsers.push(function (v) { return v.substr(v.lastIndexOf('(') + 1, 3); });
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
+							ngModel.$setPristine();
                         }
                         scope.ctrls.ngModel = ngModel;
                     }
