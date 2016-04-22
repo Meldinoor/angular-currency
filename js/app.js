@@ -182,7 +182,7 @@ var CurrencyModule;
     function CurrencySelecterDirective() {
         return {
             restrict: 'E',
-            require: 'ngModel',
+            require: ['ngModel', '^^?form'],
             bindToController: true,
             controllerAs: 'ctrls',
             controller: CurrencySelecterController,
@@ -234,8 +234,10 @@ var CurrencyModule;
                 }
                 element.append(options);
                 return {
-                    pre: function (scope, element, attr, ngModel) {
-                        var defaultCurrency = null;
+                    pre: function (scope, element, attr, ctrls) {
+                        var ngModel = ctrls[0];
+						var formCtrl = ctrls[1];
+						var defaultCurrency = null;
                         if (attr['defaultCurrency']) {
                             defaultCurrency = attr['defaultCurrency'].toString();
                         }
@@ -244,6 +246,7 @@ var CurrencyModule;
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
                             ngModel.$setPristine();
+							formCtrl.$setPristine();
                         }
                         scope.ctrls.ngModel = ngModel;
                     }
