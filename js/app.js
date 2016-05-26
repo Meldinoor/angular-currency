@@ -179,14 +179,14 @@ var CurrencyModule;
         CurrencySelecterController.$inject = [];
         return CurrencySelecterController;
     })();
-    function CurrencySelecterDirective() {
+    function CurrencySelecterDirective($compile) {
         return {
             restrict: 'E',
             require: ['ngModel', '^^?form'],
             bindToController: true,
-            controllerAs: 'ctrls',
+            controllerAs: 'ctrl',
             controller: CurrencySelecterController,
-			scope: true,
+			scope: [],
             compile: function (element, attr, transclude) {
                 var preferredCurrencies = [];
                 var includeCurrencies = [];
@@ -214,13 +214,16 @@ var CurrencyModule;
 					if(attr['direction'].toLowerCase() === 'up')
 						dropdownClass = 'dropup';
 				}
-                var options = '<div class="' + dropdownClass + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrls.ngModel.$viewValue}}<span class="caret"></span></button>'
-                    + '<ul class="dropdown-menu currency-selecter-scrollable-menu">';
+				
+				var style = attr['style'] ? attr['style'] : '';
+				
+                var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
+                    + '<ul style="' + style + '" class="dropdown-menu currency-selecter-scrollable-menu">';
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
                         if (Currencies[preferredCurrencies[i].toUpperCase()] !== void 0) {
                             var ucPc = preferredCurrencies[i].toUpperCase();
-                            options += '<li><a href="" ng-click="ctrls.selectCurrency(\'' + Currencies[ucPc] + ' (' + ucPc + ')\')" role="button">' + Currencies[ucPc] + ' (' + ucPc + ')</a></li>';
+                            options += '<li><a href="" ng-click="ctrl.selectCurrency(\'' + Currencies[ucPc] + ' (' + ucPc + ')\')" role="button">' + Currencies[ucPc] + ' (' + ucPc + ')</a></li>';
                         }
                     }
                     options += '<li role="separator" class="divider"></li>';
@@ -230,11 +233,12 @@ var CurrencyModule;
                         || excludeCurrencies.some(function (c, idx, arr) { return c.toUpperCase() === key; })
                         || (includeCurrencies.length !== 0 && !includeCurrencies.some(function (c, idx, arr) { return c.toUpperCase() === key; })))
                         continue;
-                    options += '<li><a href="" ng-click="ctrls.selectCurrency(\'' + Currencies[key] + ' (' + key + ')\')" role="button">' + Currencies[key] + ' (' + key + ')</a></li>';
+                    options += '<li><a href="" ng-click="ctrl.selectCurrency(\'' + Currencies[key] + ' (' + key + ')\')" role="button">' + Currencies[key] + ' (' + key + ')</a></li>';
                 }
                 element.append(options);
                 return {
                     pre: function (scope, element, attr, ctrls) {
+						$compile(element.children())(scope);
                         var ngModel = ctrls[0];
 						var formCtrl = ctrls[1];
 						var defaultCurrency = null;
@@ -246,14 +250,15 @@ var CurrencyModule;
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
                             ngModel.$setPristine();
-							formCtrl.$setPristine();
+							if(formCtrl)
+								formCtrl.$setPristine();
                         }
-                        scope.ctrls.ngModel = ngModel;
+                        scope.ctrl.ngModel = ngModel;
                     }
                 };
             }
         };
     }
-    angular.module('CurrencySelecter', []).directive('currencySelecter', CurrencySelecterDirective).constant('currencyConfig', {});
+    angular.module('CurrencySelecter', []).directive('currencySelecter', ['$compile',CurrencySelecterDirective]).constant('currencyConfig', {});
 })(CurrencyModule || (CurrencyModule = {}));
 //# sourceMappingURL=app.js.map

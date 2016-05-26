@@ -187,17 +187,19 @@ module CurrencyModule {
         }
     }
 
-    function CurrencySelecterDirective(): ng.IDirective {
+    function CurrencySelecterDirective($compile: ng.ICompileService): ng.IDirective {
         return {
             restrict: 'E',
-            require: 'ngModel',
+            require: ['ngModel', '^^?form'],
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
+			scope: [],
             compile: function (element: ng.IAugmentedJQuery, attr: ng.IAttributes, transclude: ng.ITranscludeFunction) {
                 var preferredCurrencies: string[] = [];
                 var includeCurrencies: string[] = [];
                 var excludeCurrencies: string[] = [];
+				var dropdownClass = 'dropdown';
 
                 if (attr['preferredCurrencies']) {
                     if (typeof attr['preferredCurrencies'] === 'array')
@@ -219,10 +221,17 @@ module CurrencyModule {
                     else
                         excludeCurrencies = attr['excludeCurrencies'].toString().split(',');
                 }
-
+				
+				if(attr['direction']) {
+					if(attr['direction'].toLowerCase() === 'up')
+						dropdownClass = 'dropup';
+				}
+				
+				var style = attr['style'] ? attr['style'] : '';
+				
                 var options: string =
-                    '<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
-                    + '<ul class="dropdown-menu currency-selecter-scrollable-menu">';
+                    '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
+                    + '<ul class="dropdown-menu currency-selecter-scrollable-menu" style="' + style + '">';
 
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
@@ -246,7 +255,10 @@ module CurrencyModule {
                 element.append(options);
 
                 return {
-                    pre: (scope: IScopeWithCurrencySelecterController, element: ng.IAugmentedJQuery, attr: ng.IAttributes, ngModel: ng.INgModelController) => {
+                    pre: (scope: IScopeWithCurrencySelecterController, element: ng.IAugmentedJQuery, attr: ng.IAttributes, ctrls) => {
+						$compile(element.children())(scope);
+						var ngModel = ctrls[0];
+						var formCtrl = ctrls[1];
                         var defaultCurrency = null;
 
                         if (attr['defaultCurrency']) {
@@ -258,6 +270,9 @@ module CurrencyModule {
 
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
+							ngModel.$setPristine();
+							if(formCtrl)
+								formCtrl.$setPristine();
                         }
 
                         scope.ctrl.ngModel = ngModel;
@@ -267,7 +282,7 @@ module CurrencyModule {
         }
     }
 
-    angular.module('CurrencySelecter', []).directive('currencySelecter', CurrencySelecterDirective).constant('currencyConfig', {
+    angular.module('CurrencySelecter', []).directive('currencySelecter', ['$compile', CurrencySelecterDirective]).constant('currencyConfig', {
 
     });
 }

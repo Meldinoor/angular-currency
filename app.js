@@ -179,17 +179,19 @@ var CurrencyModule;
         CurrencySelecterController.$inject = [];
         return CurrencySelecterController;
     })();
-    function CurrencySelecterDirective() {
+    function CurrencySelecterDirective($compile) {
         return {
             restrict: 'E',
-            require: 'ngModel',
+            require: ['ngModel', '^^?form'],
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
+			scope: [],
             compile: function (element, attr, transclude) {
                 var preferredCurrencies = [];
                 var includeCurrencies = [];
                 var excludeCurrencies = [];
+				var dropdownClass = 'dropdown';
                 if (attr['preferredCurrencies']) {
                     if (typeof attr['preferredCurrencies'] === 'array')
                         preferredCurrencies = attr['preferredCurrencies'];
@@ -208,8 +210,15 @@ var CurrencyModule;
                     else
                         excludeCurrencies = attr['excludeCurrencies'].toString().split(',');
                 }
-                var options = '<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{{ctrl.ngModel.$viewValue}}<span class="caret"></span></button>'
-                    + '<ul class="dropdown-menu currency-selecter-scrollable-menu">';
+				if(attr['direction']) {
+					if(attr['direction'].toLowerCase() === 'up')
+						dropdownClass = 'dropup';
+				}
+				
+				var style = attr['style'] ? attr['style'] : '';
+				
+                var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
+                    + '<ul style="' + style + '" class="dropdown-menu currency-selecter-scrollable-menu">';
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
                         if (Currencies[preferredCurrencies[i].toUpperCase()] !== void 0) {
@@ -228,8 +237,11 @@ var CurrencyModule;
                 }
                 element.append(options);
                 return {
-                    pre: function (scope, element, attr, ngModel) {
-                        var defaultCurrency = null;
+                    pre: function (scope, element, attr, ctrls) {
+						$compile(element.children())(scope);
+                        var ngModel = ctrls[0];
+						var formCtrl = ctrls[1];
+						var defaultCurrency = null;
                         if (attr['defaultCurrency']) {
                             defaultCurrency = attr['defaultCurrency'].toString();
                         }
@@ -237,6 +249,9 @@ var CurrencyModule;
                         ngModel.$parsers.push(function (v) { return v.substr(v.lastIndexOf('(') + 1, 3); });
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
+                            ngModel.$setPristine();
+							if(formCtrl)
+								formCtrl.$setPristine();
                         }
                         scope.ctrl.ngModel = ngModel;
                     }
@@ -244,6 +259,6 @@ var CurrencyModule;
             }
         };
     }
-    angular.module('CurrencySelecter', []).directive('currencySelecter', CurrencySelecterDirective).constant('currencyConfig', {});
+    angular.module('CurrencySelecter', []).directive('currencySelecter', ['$compile',CurrencySelecterDirective]).constant('currencyConfig', {});
 })(CurrencyModule || (CurrencyModule = {}));
 //# sourceMappingURL=app.js.map
