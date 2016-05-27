@@ -186,7 +186,7 @@ var CurrencyModule;
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
-			scope: [],
+			scope: {disabled: '=ngDisabled'},
             compile: function (element, attr, transclude) {
                 var preferredCurrencies = [];
                 var includeCurrencies = [];
@@ -217,7 +217,7 @@ var CurrencyModule;
 				
 				var style = attr['style'] ? attr['style'] : '';
 				
-                var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
+                var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
                     + '<ul style="' + style + '" class="dropdown-menu currency-selecter-scrollable-menu">';
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
