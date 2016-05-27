@@ -183,7 +183,10 @@ module CurrencyModule {
         }
 
         selectCurrency = (newCurrency: string) => {
-            this.ngModel.$setViewValue(newCurrency);
+			if(!newCurrency)
+				this.ngModel.$setViewValue(null);
+			else
+				this.ngModel.$setViewValue(newCurrency);
         }
     }
 
@@ -200,6 +203,7 @@ module CurrencyModule {
                 var includeCurrencies: string[] = [];
                 var excludeCurrencies: string[] = [];
 				var dropdownClass = 'dropdown';
+				var defaultLabel = '';
 
                 if (attr['preferredCurrencies']) {
                     if (typeof attr['preferredCurrencies'] === 'array')
@@ -227,12 +231,18 @@ module CurrencyModule {
 						dropdownClass = 'dropup';
 				}
 				
+				if(attr['default-label']) {
+					defaultLabel = attr['default-label'];
+				}
+				
 				var style = attr['style'] ? attr['style'] : '';
 				
                 var options: string =
                     '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
                     + '<ul class="dropdown-menu currency-selecter-scrollable-menu" style="' + style + '">';
-
+				
+				options += '<li><a href="" ng-click="ctrl.selectCurrency(\'\')" role="button">' + defaultLabel + '</a></li>';
+				
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
                         if (Currencies[preferredCurrencies[i].toUpperCase()] !== void 0) {
