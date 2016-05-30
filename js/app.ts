@@ -270,7 +270,7 @@ module CurrencyModule {
                             defaultCurrency = attr['defaultCurrency'].toString();
                         }                        
 
-                        ngModel.$formatters.push(m => Currencies[m] + ' (' + m + ')');
+                        ngModel.$formatters.push(m => m ? Currencies[m] + ' (' + m + ')' : null);
                         ngModel.$parsers.push(v => v.substr(v.lastIndexOf('(') + 1, 3));
 
                         if (!ngModel.$modelValue && defaultCurrency) {

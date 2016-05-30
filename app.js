@@ -249,7 +249,7 @@ var CurrencyModule;
                         if (attr['defaultCurrency']) {
                             defaultCurrency = attr['defaultCurrency'].toString();
                         }
-                        ngModel.$formatters.push(function (m) { return Currencies[m] + ' (' + m + ')'; });
+                        ngModel.$formatters.push(function (m) { return m ? Currencies[m] + ' (' + m + ')' : null; });
                         ngModel.$parsers.push(function (v) { return v ? v.substr(v.lastIndexOf('(') + 1, 3) : null; });
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
