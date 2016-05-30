@@ -195,7 +195,6 @@ var CurrencyModule;
                 var includeCurrencies = [];
                 var excludeCurrencies = [];
 				var dropdownClass = 'dropdown';
-				var defaultLabel = '';
                 if (attr['preferredCurrencies']) {
                     if (typeof attr['preferredCurrencies'] === 'array')
                         preferredCurrencies = attr['preferredCurrencies'];
@@ -218,15 +217,12 @@ var CurrencyModule;
 					if(attr['direction'].toLowerCase() === 'up')
 						dropdownClass = 'dropup';
 				}
-				if(attr['defaultLabel']) {
-					defaultLabel = attr['defaultLabel'];
-				}
 				
 				var style = attr['style'] ? attr['style'] : '';
 				
                 var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue ? ctrl.ngModel.$viewValue : ctrl.defaultLabel}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
                     + '<ul style="' + style + '" class="dropdown-menu currency-selecter-scrollable-menu">';
-				options += '<li><a href="" ng-click="ctrl.selectCurrency(\'\')" role="button">' + defaultLabel + '</a></li>';
+				options += '<li><a href="" ng-click="ctrl.selectCurrency(\'\')" role="button">{{ctrl.defaultLabel ? ctrl.defaultLabel : ""}}</a></li>';
                 if (preferredCurrencies.length) {
                     for (var i = 0; i < preferredCurrencies.length; ++i) {
                         if (Currencies[preferredCurrencies[i].toUpperCase()] !== void 0) {
