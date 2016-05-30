@@ -218,7 +218,7 @@ var CurrencyModule;
 					if(attr['direction'].toLowerCase() === 'up')
 						dropdownClass = 'dropup';
 				}
-				if(attr['default-label']) {
+				if(attr['defaultLabel']) {
 					defaultLabel = attr['default-label'];
 				}
 				

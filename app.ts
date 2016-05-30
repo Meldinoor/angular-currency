@@ -231,7 +231,7 @@ module CurrencyModule {
 						dropdownClass = 'dropup';
 				}
 				
-				if(attr['default-label']) {
+				if(attr['defaultLabel']) {
 					defaultLabel = attr['default-label'];
 				}
 				
