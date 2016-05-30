@@ -219,7 +219,7 @@ var CurrencyModule;
 						dropdownClass = 'dropup';
 				}
 				if(attr['defaultLabel']) {
-					defaultLabel = attr['default-label'];
+					defaultLabel = attr['defaultLabel'];
 				}
 				
 				var style = attr['style'] ? attr['style'] : '';
