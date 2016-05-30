@@ -189,7 +189,7 @@ var CurrencyModule;
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
-			scope: {disabled: '=ngDisabled', defaultLabel: '='},
+			scope: {disabled: '=ngDisabled', defaultLabel: '@'},
             compile: function (element, attr, transclude) {
                 var preferredCurrencies = [];
                 var includeCurrencies = [];

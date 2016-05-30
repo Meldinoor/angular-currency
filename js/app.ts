@@ -197,7 +197,7 @@ module CurrencyModule {
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
-			scope: {disabled: '=ngDisabled', defaultLabel: '='},
+			scope: {disabled: '=ngDisabled', defaultLabel: '@'},
             compile: function (element: ng.IAugmentedJQuery, attr: ng.IAttributes, transclude: ng.ITranscludeFunction) {
                 var preferredCurrencies: string[] = [];
                 var includeCurrencies: string[] = [];
