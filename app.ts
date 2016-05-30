@@ -197,7 +197,7 @@ module CurrencyModule {
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
-			scope: {disabled: '=ngDisabled'},
+			scope: {disabled: '=ngDisabled', defaultLabel: '='},
             compile: function (element: ng.IAugmentedJQuery, attr: ng.IAttributes, transclude: ng.ITranscludeFunction) {
                 var preferredCurrencies: string[] = [];
                 var includeCurrencies: string[] = [];
@@ -238,7 +238,7 @@ module CurrencyModule {
 				var style = attr['style'] ? attr['style'] : '';
 				
                 var options: string =
-                    '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
+                    '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue ? ctrl.ngModel.$viewValue : ctrl.defaultValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
                     + '<ul class="dropdown-menu currency-selecter-scrollable-menu" style="' + style + '">';
 				
 				options += '<li><a href="" ng-click="ctrl.selectCurrency(\'\')" role="button">' + defaultLabel + '</a></li>';

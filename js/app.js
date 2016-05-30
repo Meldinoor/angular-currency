@@ -189,7 +189,7 @@ var CurrencyModule;
             bindToController: true,
             controllerAs: 'ctrl',
             controller: CurrencySelecterController,
-			scope: {disabled: '=ngDisabled'},
+			scope: {disabled: '=ngDisabled', defaultLabel: '='},
             compile: function (element, attr, transclude) {
                 var preferredCurrencies = [];
                 var includeCurrencies = [];
@@ -224,7 +224,7 @@ var CurrencyModule;
 				
 				var style = attr['style'] ? attr['style'] : '';
 				
-                var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
+                var options = '<div class="' + dropdownClass + '" style="' + style + '"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style="' + style + '; text-align: left; padding-left: 20px;" ng-disabled="ctrl.disabled">{{ctrl.ngModel.$viewValue ? ctrl.ngModel.$viewValue : ctrl.defaultLabel}}<span class="caret" style="position: absolute; right: 10px; top: 48%;"></span></button>'
                     + '<ul style="' + style + '" class="dropdown-menu currency-selecter-scrollable-menu">';
 				options += '<li><a href="" ng-click="ctrl.selectCurrency(\'\')" role="button">' + defaultLabel + '</a></li>';
                 if (preferredCurrencies.length) {
@@ -254,7 +254,7 @@ var CurrencyModule;
                             defaultCurrency = attr['defaultCurrency'].toString();
                         }
                         ngModel.$formatters.push(function (m) { return Currencies[m] + ' (' + m + ')'; });
-                        ngModel.$parsers.push(function (v) { return v.substr(v.lastIndexOf('(') + 1, 3); });
+                        ngModel.$parsers.push(function (v) { return v ? v.substr(v.lastIndexOf('(') + 1, 3) : null; });
                         if (!ngModel.$modelValue && defaultCurrency) {
                             ngModel.$setViewValue(Currencies[defaultCurrency] + ' (' + defaultCurrency + ')');
                             ngModel.$setPristine();
