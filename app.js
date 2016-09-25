@@ -245,9 +245,6 @@ var CurrencyModule;
 						$compile(element.children())(scope);
                         var ngModel = ctrls[0];
 						var formCtrl = ctrls[1];
-						scope.$watch(attr.ngModel, function() {
-							scope.ctrl.selectCurrency(ngModel.$modelValue ? Currencies[ngModel.$modelValue] + ' (' + ngMode.$modelValue + ')');
-						});
 						var defaultCurrency = null;
                         if (attr['defaultCurrency']) {
                             defaultCurrency = attr['defaultCurrency'].toString();
